@@ -1,0 +1,35 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View } from 'react-native';
+
+import HomeScreen from './src/screens/HomeScreen';
+import DetailsScreen from './src/screens/DetailsScreen';
+
+const Stack = createNativeStackNavigator();
+const queryClient = new QueryClient()
+
+export default function App() {
+  return (
+    <View style={styles.wrap}>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name='Home' component={HomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name='Details' component={DetailsScreen} options={{ headerShown: false }} />
+          </Stack.Navigator>
+          <StatusBar style="auto" />
+        </NavigationContainer>
+      </QueryClientProvider>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrap: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#121212'
+  }
+});
