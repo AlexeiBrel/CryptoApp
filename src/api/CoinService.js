@@ -10,4 +10,9 @@ export default class CoinService {
         const response = await axios.get(`https://api.coingecko.com/api/v3/coins/${id}`)
         return response.data
     }
+
+    static async getMarketChart(id) {
+        const response = await axios.get(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=1&limit=10`);
+        return response.data
+    }
 } 

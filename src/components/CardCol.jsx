@@ -1,13 +1,9 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React, { memo } from 'react'
 
+import setColor from '../utils/setColor'
 
 export default memo(function Card({ item }) {
-
-    function setColor(number) {
-        return number < 0 ? styles.redText : styles.greenText;
-    }
-
     return (
         <View style={styles.card}>
             <View style={styles.row}>
@@ -33,7 +29,7 @@ export default memo(function Card({ item }) {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#313233',
+        backgroundColor: '#3F4462',
         width: 170,
         height: 170,
         borderRadius: 20,
@@ -61,14 +57,6 @@ const styles = StyleSheet.create({
     icon: {
         width: 35,
         height: 35
-    },
-
-    redText: {
-        color: '#FF6A00',
-    },
-
-    greenText: {
-        color: '#68D4C1',
     },
 
     bold: {

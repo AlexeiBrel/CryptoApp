@@ -1,29 +1,31 @@
 import { FlatList, StyleSheet, View, RefreshControl, TouchableOpacity, Text } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 
-import Card from '../components/Card'
 import CoinService from '../api/CoinService'
 import Loader from '../components/Loader'
+import CardCol from '../components/CardCol'
+import CardRow from '../components/CardRow'
+import Header from '../components/Header'
+import { useToggleCard } from '../context/CardContext'
+import { useSearch } from '../context/SearchContext'
+
+
 
 export default function HomeScreen({ navigation }) {
     const [page, setPage] = useState(0)
+    const { toggleCard, key } = useToggleCard()
+    const { search } = useSearch()
+
     const { data, isLoading, isSuccess, isFetching, isError, isPreviousData } = useQuery({
         queryKey: ['coins', page],
         queryFn: () => CoinService.getAll(page),
         keepPreviousData: true
     })
 
-
-    const loadMoreCoins = () => {
-        if (!isPreviousData) {
-            setPage(prev => prev + 10)
-        }
-    }
-
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate('Details', { id: item.id })}>
-            <Card item={item} />
+            {toggleCard ? <CardRow item={item} /> : <CardCol item={item} />}
         </TouchableOpacity>
     )
 
@@ -37,10 +39,12 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <View style={styles.wrap}>
+            <Header />
             {isSuccess &&
                 <FlatList
+                    key={key}
                     horizontal={false}
-                    numColumns={2}
+                    numColumns={toggleCard ? 1 : 2}
                     data={data}
                     keyExtractor={(item) => item.id}
                     renderItem={renderItem}
@@ -56,13 +60,13 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
     wrap: {
         flex: 1,
-        backgroundColor: '#121212',
-        // padding: 10,                
+        backgroundColor: '#1B2035',
+        padding: 10,
     },
 
     flatList: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        margin: 'auto',
+        width: '100%',
     },
 
     warningText: {
